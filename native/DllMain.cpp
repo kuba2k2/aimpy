@@ -2,9 +2,9 @@
 
 extern "C"
 {
-    __declspec(dllexport) BOOL WINAPI AIMPPluginGetHeader(IAIMPPlugin **Header)
-    {
-        *Header = new AimpPlugin();
-        return true;
-    }
+	__declspec(dllexport) BOOL WINAPI AIMPPluginGetHeader(IAIMPPlugin **Header)
+	{
+		*Header = new AimpPlugin();
+		return true;
+	}
 }

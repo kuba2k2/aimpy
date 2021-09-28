@@ -8,12 +8,12 @@ class AimpPlugin;
 
 class ServerThread : public Thread
 {
-    virtual DWORD Run();
+	virtual DWORD Run();
 
 public:
-    ServerThread(AimpPlugin *pPlugin);
+	ServerThread(AimpPlugin *pPlugin);
 
 private:
-    AimpPlugin *pPlugin = NULL;
-    LPCTSTR lpszPipeName;
+	AimpPlugin *pPlugin = NULL;
+	LPCTSTR lpszPipeName;
 };

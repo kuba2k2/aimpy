@@ -4,14 +4,14 @@
 
 class Thread
 {
-    virtual DWORD Run() = 0;
-    static DWORD WINAPI ThreadEntryPoint(LPVOID lpParam);
+	virtual DWORD Run() = 0;
+	static DWORD WINAPI ThreadEntryPoint(LPVOID lpParam);
 
 public:
-    HANDLE Start();
-    BOOL Stop();
+	HANDLE Start();
+	BOOL Stop();
 
 private:
-    HANDLE hThread;
-    DWORD dwThreadId;
+	HANDLE hThread;
+	DWORD dwThreadId;
 };

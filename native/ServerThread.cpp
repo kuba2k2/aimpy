@@ -8,56 +8,56 @@
 
 ServerThread::ServerThread(AimpPlugin *pPlugin)
 {
-    this->pPlugin = pPlugin;
-    this->lpszPipeName = TEXT(PIPE_NAME);
+	this->pPlugin = pPlugin;
+	this->lpszPipeName = TEXT(PIPE_NAME);
 }
 
 DWORD ServerThread::Run()
 {
-    printf("ServerThread::Run()\n");
+	printf("ServerThread::Run()\n");
 
-    BOOL fConnected = FALSE;
-    HANDLE hPipe = INVALID_HANDLE_VALUE, hThread = NULL;
+	BOOL fConnected = FALSE;
+	HANDLE hPipe = INVALID_HANDLE_VALUE, hThread = NULL;
 
-    for (;;)
-    {
-        printf("Awaiting client connection on %s\n", this->lpszPipeName);
-        hPipe = CreateNamedPipe(
-            this->lpszPipeName,
-            PIPE_ACCESS_DUPLEX,
-            PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
-            PIPE_UNLIMITED_INSTANCES,
-            PIPE_BUFSIZE,
-            PIPE_BUFSIZE,
-            NMPWAIT_USE_DEFAULT_WAIT, NULL);
+	for (;;)
+	{
+		printf("Awaiting client connection on %s\n", this->lpszPipeName);
+		hPipe = CreateNamedPipe(
+			this->lpszPipeName,
+			PIPE_ACCESS_DUPLEX,
+			PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+			PIPE_UNLIMITED_INSTANCES,
+			PIPE_BUFSIZE,
+			PIPE_BUFSIZE,
+			NMPWAIT_USE_DEFAULT_WAIT, NULL);
 
-        if (hPipe == INVALID_HANDLE_VALUE)
-        {
-            printf("CreateNamedPipe failed, GLE=0x%04x\n", GetLastError());
-            break;
-        }
+		if (hPipe == INVALID_HANDLE_VALUE)
+		{
+			printf("CreateNamedPipe failed, GLE=0x%04x\n", GetLastError());
+			break;
+		}
 
-        fConnected = ConnectNamedPipe(hPipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
+		fConnected = ConnectNamedPipe(hPipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
 
-        if (fConnected)
-        {
-            printf("Client connected\n");
+		if (fConnected)
+		{
+			printf("Client connected\n");
 
-            ClientThread *thread = new ClientThread(this->pPlugin, hPipe);
-            hThread = thread->Start();
+			ClientThread *thread = new ClientThread(this->pPlugin, hPipe);
+			hThread = thread->Start();
 
-            if (hThread == NULL)
-            {
-                printf("CreateThread failed, GLE=0x%04x\n", GetLastError());
-                continue;
-            }
-            // else
-            CloseHandle(hThread);
-            continue;
-        }
-        // else
-        CloseHandle(hPipe);
-    }
+			if (hThread == NULL)
+			{
+				printf("CreateThread failed, GLE=0x%04x\n", GetLastError());
+				continue;
+			}
+			// else
+			CloseHandle(hThread);
+			continue;
+		}
+		// else
+		CloseHandle(hPipe);
+	}
 
-    return 0;
+	return 0;
 }
