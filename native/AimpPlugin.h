@@ -1,10 +1,15 @@
 #pragma once
 
 #include <IUnknownInterface.h>
-#include <apiPlugin.h>
+#include <tchar.h>
 #include <windows.h>
 
+#include <apiPlayer.h>
+#include <apiPlugin.h>
+
 #include "AimpMessageHook.h"
+#include "PacketConsumer.h"
+#include "PacketProducer.h"
 #include "ServerThread.h"
 
 class AimpPlugin : public IUnknownInterfaceImpl<IAIMPPlugin>
@@ -19,7 +24,12 @@ class AimpPlugin : public IUnknownInterfaceImpl<IAIMPPlugin>
 	virtual void WINAPI SystemNotification(int NotifyID, IUnknown *Data);
 
 public:
-	IAIMPCore *pCore;
+	IAIMPCore *pCore = NULL;
+	IAIMPServicePlayer *pPlayer = NULL;
+	IAIMPServiceVersionInfo *pVersionInfo = NULL;
+
 	AimpMessageHook *pHook = NULL;
+	PacketConsumer *pConsumer = NULL;
+	PacketProducer *pProducer = NULL;
 	ServerThread *pServer = NULL;
 };

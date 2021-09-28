@@ -15,6 +15,7 @@
 
 #include <windows.h>
 #include <unknwn.h>
+#include <tchar.h>
 #include "apiObjects.h"
 #include "apiThreading.h"
 
@@ -147,9 +148,9 @@ const int AIMP_PLAYLISTPREIMAGE_PLAYLISTBASED_PROPID_URI = 100;
 const int AIMP_PREIMAGEFACTORY_FLAG_CONTEXTDEPENDENT = 1;
 
 // Built-in Preimage Factories
-static const WCHAR* AIMP_PREIMAGEFACTORY_FOLDERS_ID = _T("TAIMPPlaylistFoldersPreimage");
-static const WCHAR* AIMP_PREIMAGEFACTORY_MUSICLIBRARY_ID = _T("TAIMPMLPlaylistPreimage");
-static const WCHAR* AIMP_PREIMAGEFACTORY_PLAYLIST_ID = _T("TAIMPPlaylistBasedPreimage");
+static const WCHAR* AIMP_PREIMAGEFACTORY_FOLDERS_ID = _T(L"TAIMPPlaylistFoldersPreimage");
+static const WCHAR* AIMP_PREIMAGEFACTORY_MUSICLIBRARY_ID = _T(L"TAIMPMLPlaylistPreimage");
+static const WCHAR* AIMP_PREIMAGEFACTORY_PLAYLIST_ID = _T(L"TAIMPPlaylistBasedPreimage");
 
 /* IAIMPPlaylistItem */
 

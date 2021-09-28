@@ -8,7 +8,7 @@ class AimpPlugin;
 
 class AimpMessageHook : public IUnknownInterfaceImpl<IAIMPMessageHook>
 {
-	virtual void WINAPI CoreMessage(DWORD dwMessage, int iParam1, void *pParam2, HRESULT *hResult);
+	virtual void WINAPI CoreMessage(DWORD dwMessage, INT iParam, PVOID pParam, HRESULT *hResult);
 
 public:
 	AimpMessageHook(AimpPlugin *pPlugin);

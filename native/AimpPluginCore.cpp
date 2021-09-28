@@ -4,6 +4,9 @@
 #include <stdio.h>
 
 #include "Console.h"
+#include "addressbook.pb.h"
+
+using namespace tutorial;
 
 PWCHAR WINAPI AimpPlugin::InfoGet(int Index)
 {
@@ -30,21 +33,26 @@ HRESULT WINAPI AimpPlugin::Initialize(IAIMPCore *Core)
 	EnableConsoleWindow();
 
 	this->pCore = Core;
+	Core->QueryInterface(IID_IAIMPServicePlayer, (void **)&this->pPlayer);
+	Core->QueryInterface(IID_IAIMPServiceVersionInfo, (void **)&this->pVersionInfo);
 
-	IAIMPServiceVersionInfo *pVersionInfo = NULL;
-	Core->QueryInterface(IID_IAIMPServiceVersionInfo, (void **)&pVersionInfo);
+	// if (this->pHook == NULL)
+	this->pHook = new AimpMessageHook(this);
+
+	// if (this->pConsumer == NULL)
+	this->pConsumer = new PacketConsumer(this);
+
+	// if (this->pProducer == NULL)
+	this->pProducer = new PacketProducer(this);
+
+	// if (this->pServer == NULL)
+	this->pServer = new ServerThread(this);
 
 	IAIMPString *asVersion;
-	pVersionInfo->FormatInfo(&asVersion);
+	this->pVersionInfo->FormatInfo(&asVersion);
 	PWCHAR pwszVersion = asVersion->GetData();
 
 	printf("Running on AIMP %ls\n", pwszVersion);
-
-	if (this->pServer == NULL)
-		this->pServer = new ServerThread(this);
-
-	if (this->pHook == NULL)
-		this->pHook = new AimpMessageHook(this);
 
 	this->pServer->Start();
 	this->pHook->Enable();
