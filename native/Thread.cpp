@@ -14,10 +14,21 @@ HANDLE Thread::Start()
 
 BOOL Thread::Stop()
 {
-	return TerminateThread(this->hThread, -1);
+	BOOL fSuccess = TerminateThread(this->hThread, -1);
+	CloseHandle(this->hThread);
+	return fSuccess;
+}
+
+BOOL Thread::IsAlive()
+{
+	DWORD dwResult = WaitForSingleObject(this->hThread, 0);
+	return dwResult != WAIT_OBJECT_0;
 }
 
 DWORD WINAPI Thread::ThreadEntryPoint(LPVOID lpParam)
 {
-	return ((Thread *)lpParam)->Run();
+	Thread *pThread = ((Thread *)lpParam);
+	DWORD dwExitCode = pThread->Run();
+	CloseHandle(pThread->hThread);
+	return dwExitCode;
 }

@@ -15,7 +15,9 @@ HRESULT PacketProducer::ProduceFromMessage(DWORD dwMessage, INT iParam, PVOID pP
 		case AIMP_MSG_EVENT_PLAYER_UPDATE_POSITION_HR:
 			double fpPosition = 0.0;
 			this->pPlugin->pPlayer->GetPosition(&fpPosition);
-			printf("Current position: %.2f\n", fpPosition);
+			CHAR buf[1024];
+			INT nBytes = sprintf(buf, "Current position: %.2f\n", fpPosition);
+			this->pPlugin->pServer->Broadcast(buf, nBytes);
 			break;
 	}
 

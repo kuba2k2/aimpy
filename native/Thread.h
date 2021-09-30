@@ -10,6 +10,7 @@ class Thread
 public:
 	HANDLE Start();
 	BOOL Stop();
+	BOOL IsAlive();
 
 private:
 	HANDLE hThread;

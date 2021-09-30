@@ -12,10 +12,9 @@ class ClientThread : public Thread
 
 public:
 	ClientThread(AimpPlugin *pPlugin, HANDLE hPipe);
+	BOOL Write(LPCVOID lpBuffer, DWORD szBuffer);
 
 private:
 	AimpPlugin *pPlugin = NULL;
 	HANDLE hPipe;
-
-	BOOL Write(LPCVOID lpBuffer, DWORD szBuffer);
 };

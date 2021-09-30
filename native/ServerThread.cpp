@@ -21,7 +21,7 @@ DWORD ServerThread::Run()
 
 	for (;;)
 	{
-		printf("Awaiting client connection on %s\n", this->lpszPipeName);
+		printf("[Server] Awaiting client connection on %s\n", this->lpszPipeName);
 		hPipe = CreateNamedPipe(
 			this->lpszPipeName,
 			PIPE_ACCESS_DUPLEX,
@@ -41,10 +41,12 @@ DWORD ServerThread::Run()
 
 		if (fConnected)
 		{
-			printf("Client connected\n");
+			printf("[Server] Client connected\n");
 
-			ClientThread *thread = new ClientThread(this->pPlugin, hPipe);
-			hThread = thread->Start();
+			ClientThread *client = new ClientThread(this->pPlugin, hPipe);
+			hThread = client->Start();
+			// this->vClients.push_back(*client);
+			this->vClients.emplace_back(*client);
 
 			if (hThread == NULL)
 			{
@@ -52,7 +54,6 @@ DWORD ServerThread::Run()
 				continue;
 			}
 			// else
-			CloseHandle(hThread);
 			continue;
 		}
 		// else
@@ -60,4 +61,26 @@ DWORD ServerThread::Run()
 	}
 
 	return 0;
+}
+
+void ServerThread::Broadcast(LPCVOID lpBuffer, DWORD szBuffer)
+{
+	for (auto client = this->vClients.begin(); client != this->vClients.end();)
+	{
+		if (!client->IsAlive())
+		{
+			printf("[Broadcast] Thread terminated, erasing\n");
+			this->vClients.erase(client);
+			continue;
+		}
+
+		if (!client->Write(lpBuffer, szBuffer))
+		{
+			printf("[Broadcast] Thread write failed, erasing\n");
+			this->vClients.erase(client);
+			continue;
+		}
+
+		++client;
+	}
 }

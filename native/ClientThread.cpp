@@ -23,7 +23,7 @@ DWORD ClientThread::Run()
 	BOOL fSuccess = FALSE;
 
 	sprintf(pchReply, "Hello From ClientThread\n");
-	cbReplyBytes = strlen(pchReply) + 1;
+	cbReplyBytes = strlen(pchReply);
 
 	for (;;)
 	{
